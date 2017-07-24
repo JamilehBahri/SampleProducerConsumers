@@ -1,13 +1,11 @@
 package ir.phgint;
 
 
-public abstract class Consumer implements IConsumer, Runnable {
-    protected Buffer buffer;
+public class Consumer implements Runnable {
 
-    public Consumer(Buffer buffer) {
-        this.buffer = buffer;
-    }
 
+    private Buffer buffer;
+//    private final TransferQueue<Integer> tQueue;
     boolean isRunning = true;
 
     public boolean getIsRunning() {
@@ -18,14 +16,42 @@ public abstract class Consumer implements IConsumer, Runnable {
         this.isRunning = isRunning;
     }
 
-    public void run() {
+    public Consumer( Buffer buffer) {
+        this.buffer = buffer;
+//        this.tQueue = tQueue;
+    }
+
+    public  void run() {
+
         while (getIsRunning()) {
-            getPrime();
+           getPrime();
         }
         if (!buffer.isFlag()) {
             getPrime();
         }
-
     }
+
+    public void getPrime() {
+
+        synchronized (buffer) {
+            if (buffer.isFlag()) {
+                try {
+                    buffer.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (!buffer.isFlag())
+        try {
+            System.out.println(buffer.tQueue.take());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+            buffer.setFlag(true);
+            buffer.notify();
+
+        }
+    }
+
 
 }
