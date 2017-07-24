@@ -1,15 +1,15 @@
 package ir.phgint;
 
 
+import java.util.concurrent.TransferQueue;
+
 public class Producer extends Thread {
 
-    
 
-    private Buffer buffer;
-//    private final TransferQueue<Integer> tQueue;
-    public Producer( Buffer buffer ) {
-        this.buffer = buffer;
+    private final TransferQueue<Integer> tQueue;
 
+    public Producer(TransferQueue<Integer> tQueue) {
+        this.tQueue = tQueue;
     }
 
     public void run() {
@@ -23,23 +23,11 @@ public class Producer extends Thread {
 
     }
 
-    public  void setPrime(int i) {
-        synchronized (buffer) {
-            if (!buffer.isFlag()) {
-
-                try {
-                    buffer.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+    public void setPrime(int i) {
         try {
-            buffer.tQueue.put(i);
+            tQueue.put(i);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        buffer.setFlag(false);
-            buffer.notify();
         }
     }
 
