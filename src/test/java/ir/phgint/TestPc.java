@@ -19,7 +19,6 @@ public class TestPc {
             thread.start();
             producer.start();
             producer.join(0);
-            Thread.sleep(1000);
             consumer1.setIsRunning(false);
             thread.interrupt();
             thread.join(0);

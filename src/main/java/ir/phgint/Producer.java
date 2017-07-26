@@ -24,8 +24,9 @@ public class Producer extends Thread {
     }
 
     public void setPrime(int i) {
+
         try {
-            tQueue.put(i);
+            tQueue.transfer(i);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
