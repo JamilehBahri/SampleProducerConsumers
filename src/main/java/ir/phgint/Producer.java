@@ -1,14 +1,15 @@
 package ir.phgint;
 
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TransferQueue;
 
 public class Producer extends Thread {
 
 
-    private final TransferQueue<Integer> tQueue;
+    private final BlockingQueue<Integer> tQueue;
 
-    public Producer(TransferQueue<Integer> tQueue) {
+    public Producer(BlockingQueue<Integer> tQueue) {
         this.tQueue = tQueue;
     }
 
@@ -26,7 +27,7 @@ public class Producer extends Thread {
     public void setPrime(int i) {
 
         try {
-            tQueue.transfer(i);
+            tQueue.put(i);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

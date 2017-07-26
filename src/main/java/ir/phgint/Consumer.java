@@ -1,11 +1,12 @@
 package ir.phgint;
 
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TransferQueue;
 
 public class Consumer implements Runnable {
 
-    private final TransferQueue<Integer> tQueue;
+    private final BlockingQueue<Integer> tQueue;
     private boolean isRunning = true;
 
     public boolean getIsRunning() {
@@ -16,7 +17,7 @@ public class Consumer implements Runnable {
         this.isRunning = isRunning;
     }
 
-    public Consumer(TransferQueue<Integer> tQueue) {
+    public Consumer(BlockingQueue<Integer> tQueue) {
         this.tQueue = tQueue;
 
     }

@@ -2,14 +2,15 @@ package ir.phgint;
 
 import org.junit.Test;
 
-import java.util.concurrent.LinkedTransferQueue;
-import java.util.concurrent.TransferQueue;
+import java.util.ArrayList;
+import java.util.concurrent.*;
 
 public class TestPc {
 
     @Test
     public void pc() {
-        final TransferQueue<Integer> tQueue = new LinkedTransferQueue();
+
+        final BlockingQueue<Integer> tQueue = new LinkedBlockingQueue<Integer>(1);
 
         Producer producer = new Producer(tQueue);
         Consumer consumer1 = new Consumer(tQueue);
