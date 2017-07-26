@@ -3,6 +3,8 @@ package ir.phgint;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.*;
 
 public class TestPc {
@@ -10,10 +12,11 @@ public class TestPc {
     @Test
     public void pc() {
 
-        final BlockingQueue<Integer> tQueue = new LinkedBlockingQueue<Integer>(1);
+        final Queue<Integer> tQueue = new LinkedList<Integer>();
 
-        Producer producer = new Producer(tQueue);
-        Consumer consumer1 = new Consumer(tQueue);
+        Buffer buffer = new Buffer(tQueue,true);
+        Producer producer = new Producer(buffer);
+        Consumer consumer1 = new Consumer(buffer);
         Thread thread = new Thread(consumer1);
 
         try {

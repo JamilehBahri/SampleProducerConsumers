@@ -1,16 +1,16 @@
 package ir.phgint;
 
 
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TransferQueue;
 
 public class Producer extends Thread {
 
+    private Buffer buffer;
 
-    private final BlockingQueue<Integer> tQueue;
-
-    public Producer(BlockingQueue<Integer> tQueue) {
-        this.tQueue = tQueue;
+    public Producer(Buffer buffer) {
+        this.buffer = buffer;
     }
 
     public void run() {
@@ -26,11 +26,20 @@ public class Producer extends Thread {
 
     public void setPrime(int i) {
 
-        try {
-            tQueue.put(i);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        synchronized (buffer)
+        {
+            if (!buffer.isFlag()) {
+                try {
+                    buffer.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            buffer.setPrimeNumber(i);
+            buffer.setFlag(false);
+            buffer.notify();
         }
+
     }
 
     static boolean isPrimeNumber(int i) {
