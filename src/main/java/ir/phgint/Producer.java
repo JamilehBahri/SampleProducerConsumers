@@ -1,45 +1,37 @@
 package ir.phgint;
 
 
+import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TransferQueue;
+
 
 public class Producer extends Thread {
 
+    private final Queue<PrimeNumber> pQueue;
     private Buffer buffer;
 
-    public Producer(Buffer buffer) {
+
+
+    public Producer(Queue<PrimeNumber> pQueue , Buffer buffer) {
+        this.pQueue = pQueue;
         this.buffer = buffer;
+
     }
 
     public void run() {
 
-        for (int i = 1; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             if (isPrimeNumber(i)) {
                 setPrime(i);
             }
-
         }
-
+        buffer.setFlag(false);
     }
 
     public void setPrime(int i) {
 
-        synchronized (buffer)
-        {
-            if (!buffer.isFlag()) {
-                try {
-                    buffer.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            buffer.setPrimeNumber(i);
-            buffer.setFlag(false);
-            buffer.notify();
-        }
-
+        PrimeNumber pr = new PrimeNumber(i);
+        pQueue.add(pr);
     }
 
     static boolean isPrimeNumber(int i) {

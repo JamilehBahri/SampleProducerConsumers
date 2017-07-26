@@ -1,14 +1,13 @@
 package ir.phgint;
 
-
 import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TransferQueue;
 
 public class Consumer implements Runnable {
 
-    private  Buffer buffer;
+    private final Queue<PrimeNumber> pQueue;
+
     private boolean isRunning = true;
+    private Buffer buffer;
 
     public boolean getIsRunning() {
         return isRunning;
@@ -18,40 +17,22 @@ public class Consumer implements Runnable {
         this.isRunning = isRunning;
     }
 
-    public Consumer(Buffer buffer) {
+    public Consumer(Queue<PrimeNumber> pQueue , Buffer buffer) {
+        this.pQueue = pQueue;
         this.buffer = buffer;
-
     }
-
     public  void run() {
 
         while (getIsRunning()) {
-           getPrime();
-        }
-        if(!buffer.isFlag())
-            getPrime();
 
+              getPrime();
+        }
     }
 
     public void getPrime() {
-
-        synchronized (buffer)
-        {
-            if (buffer.isFlag())
-            {
-                try {
-                    buffer.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (!buffer.isFlag())
-                System.out.println(buffer.getPrimeNumber());
-            buffer.setFlag(true);
-            buffer.notify();
+        if(!pQueue.isEmpty()&& !buffer.isFlag()) {
+            System.out.println(pQueue.poll());
         }
-
-
     }
 
 

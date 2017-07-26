@@ -1,16 +1,12 @@
 
 package ir.phgint;
 
-import java.util.Queue;
-
 public class Buffer {
 
-    public final Queue<Integer> tQueue;
-
+//    private int primeNumber;
     private boolean flag = true;
 
-    public Buffer(Queue<Integer> tQueue, boolean flag) {
-        this.tQueue = tQueue;
+    public Buffer(boolean flag) {
         this.flag = flag;
     }
 
@@ -22,14 +18,13 @@ public class Buffer {
         this.flag = flag;
     }
 
-    public  void setPrimeNumber(int i) {
-        tQueue.add(i);
-
-    }
-
-    public  int getPrimeNumber() {
-
-        return tQueue.poll();
-    }
+//    public  void setPrimeNumber(int i) {
+//         primeNumber = i;
+//    }
+//
+//    public  int getPrimeNumber() {
+//
+//        return primeNumber;
+//    }
 }
 
